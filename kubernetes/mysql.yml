@@ -1,0 +1,77 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: notes-app
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: mysql-depl
+  namespace: notes-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name:  MYSQL_ROOT_PASSWORD
+              value: "root"
+            - name: MYSQL_DATABASE
+              value: "notes"
+            - name: MYSQL_USER
+              value: "cat"
+            - name: MYSQL_PASSWORD
+              value: "meow"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - "-h"
+                - "localhost"
+                - "-uroot"
+                - "-proot"
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql-svc
+  namespace: notes-app
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mysql-pvc
+  namespace: notes-app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
