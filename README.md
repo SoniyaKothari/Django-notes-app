@@ -21,7 +21,7 @@ Key highlights of the pipeline:
 - Full pipeline execution in under 7 minutes
 - Docker image pushed automatically and deployed to Kubernetes via ArgoCD
 
-## Monitoring & Alerts
+## Gmail Alerts
 ![Gmail Alert from Grafana](assets/ds15.PNG)
 
 The monitoring stack provides:
