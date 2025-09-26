@@ -22,7 +22,7 @@ Key highlights of the pipeline:
 - Docker image pushed automatically and deployed to Kubernetes via ArgoCD
 
 ## Monitoring & Alerts
-![Gmail Alert from Grafana](assets/ds15.png)
+![Gmail Alert from Grafana](assets/ds15.PNG)
 
 The monitoring stack provides:
 - Real-time CPU, memory, and pod availability metrics
